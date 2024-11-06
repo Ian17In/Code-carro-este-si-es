@@ -34,8 +34,8 @@ car = CARIR(IN1PIN, IN2PIN, IN3PIN, IN4PIN, IN5PIN, IN6PIN, IN7PIN, IN8PIN, ENAP
 distance = 0
 
 
-def Straight(avg_speed):
-    while True:
+def Straight(avg_speed,switch):
+    while switch:
         IR = car.readIR()
         #distance = car.obstacleDetector(trig_pin, echo_pin)
 
@@ -86,7 +86,7 @@ def dischargeRoutine(avgSpeed,switch):
         t.sleep(1)
         car.rotate_180_right(0.4,avgSpeed,avgSpeed)
         t.sleep(1)
-        Straight(avgSpeed)
+        Straight(avgSpeed,switch)
 
 def chargeRoutine(avgSpeed,switch):
 
@@ -103,23 +103,23 @@ def chargeRoutine(avgSpeed,switch):
         t.sleep(1)
         car.rotate_180_left(0.4,avgSpeed,avgSpeed)
         t.sleep(1)
-        Straight(avgSpeed) 
+        Straight(avgSpeed,switch) 
 
 def CheckFlagCharge(avgSpeed):
     while True:
         if (car.flag):
             dischargeRoutine(avgSpeed,1)
+            chargeRoutine(avgSpeed,0)
         else:
+            dischargeRoutine(avgSpeed,0)
             chargeRoutine(avgSpeed,1)
-
-#_thread.start_new_thread(MappingServ, [])
-#_thread.start_new_thread(Straight(AVGSPEED),[])
 
 
 def main(): 
-    #_thread.start_new_thread(Straight, [AVGSPEED,car.counterFlag])
-    #_thread.start_new_thread(MappingServ, [])
     _thread.start_new_thread(CheckFlagCharge, [AVGSPEED])
 
 
+#chargeRoutine(AVGSPEED,1)
 CheckFlagCharge(AVGSPEED)
+
+#UltrasonicMap()

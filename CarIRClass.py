@@ -267,10 +267,10 @@ class CARIR():
             self.move_forward(speed1, speed2)
         elif sensor_central == 1 and sensor_izq1 == 0 and sensor_der1 == 1 and sensor_izq2==1 and sensor_der2 == 1:
             #print("ajuste a la izquierda.")
-            self.Left(speed1, speed2)
+            self.Right(speed1, speed2)
         elif sensor_central == 1 and sensor_izq1 == 1 and sensor_der1 == 1 and sensor_izq2==1 and sensor_der2 == 0:
             #print("ajuste a la derecha.")
-            self.Right(speed1, speed2)
+            self.Left(speed1, speed2)
 
         elif sensor_central == 0 and sensor_izq1 == 0 and sensor_izq2 == 0 and sensor_der1 == 1 and sensor_der2 == 1:
             #print("giro duro a la izquierda")
@@ -329,75 +329,4 @@ if __name__ == '__main__':
     echo_pin = 2
 
     car = CARIR(IN1PIN, IN2PIN, IN3PIN, IN4PIN, IN5PIN, IN6PIN, IN7PIN, IN8PIN, ENAPIN, ENBPIN, ENCPIN, ENDPIN, AVGSPEED, FREQ,RIleft_pin,RIright_pin,RIcente_pin)
-    #PID = PIDController(kp=.1, ki=.1, kd=.5, avg_speed=AVGSPEED, move_function=car.move_forward)
-    while True:
-
-        """
-        t.sleep(2)  
-        car.move_forward(AVGSPEED, AVGSPEED)
-        t.sleep(2)
-        car.move_backward(AVGSPEED, AVGSPEED)
-        t.sleep(2)
-        car.Left(AVGSPEED, AVGSPEED)
-        t.sleep(2)
-        car.Right(AVGSPEED, AVGSPEED)
-        t.sleep(2)
-        """
-        
-        """
-        
-        if car.obstacleDetector(triggerPin=trig_pin,echoPin=echo_pin) == 10:
-            car.evasionRoutine(AVGSPEED,AVGSPEED)
-        else:
-            RIVAL = car.readIR()
-        #PID.calculate(ir_values=RIVAL)
-            car.GOstraight(RIVAL,AVGSPEED,AVGSPEED)
-       """
-        
-        RIVAL = car.readIR()
-        car.GOstraight(RIVAL,AVGSPEED,AVGSPEED)
-        """
-        
-        distance =car.obstacleDetector(echoPin=echo_pin, triggerPin=trig_pin)
-        t.sleep(0.01)
-        print(int(distance)) 
-        
-        if int(distance) <= 15:
-            car.stop()
-            t.sleep(0.5) 
-            car.evasionRoutine(AVGSPEED, AVGSPEED)
-        else:
-            car.move_forward(AVGSPEED, AVGSPEED)
-        
-        """
-        #car.Gripper(PinNum=2, angle=90)
-        #t.sleep(2)
-        #car.Gripper(PinNum=2, angle=0)
-        #t.sleep(2)
-        """"
-        car.moveServo(m.Pin(2), angle=90)
-        t.sleep(2)
-        car.moveServo(m.Pin(2), angle=0)
-        t.sleep(2)
-        """ 
-
-        #car.stop()
-        #t.sleep(2)
-        #car.move_
-
-
-        
-  
-
-
-    
-
-
-
-
-
-
-
-
-
-    
+ 
