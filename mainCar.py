@@ -34,8 +34,8 @@ car = CARIR(IN1PIN, IN2PIN, IN3PIN, IN4PIN, IN5PIN, IN6PIN, IN7PIN, IN8PIN, ENAP
 distance = 0
 
 
-def Straight(avg_speed,switch):
-    while switch:
+def Straight(avg_speed):
+    while car.flag:
         IR = car.readIR()
         #distance = car.obstacleDetector(trig_pin, echo_pin)
 
@@ -61,20 +61,13 @@ def moveServo(servo,angle):
     servo = PWM(Pin(servo),freq=50)
         
     min_duty = 1
-    max_duty = 300
+    max_duty = 250
     duty = min_duty + (max_duty - min_duty) * angle // 180
     servo.duty(duty)
 
-def UltrasonicMap():
-    global distance
-    while True:
-        distance = car.obstacleDetector(trig_pin, echo_pin)
-        print(f"Distancia: {round(distance)} cm")
-        t.sleep(0.1)
-
-
 def dischargeRoutine(avgSpeed,switch):
     if switch:
+        car.setFlag()
         car.stop()
         t.sleep(1)
         moveServo(16,35)
@@ -84,9 +77,9 @@ def dischargeRoutine(avgSpeed,switch):
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(1)
-        car.rotate_180_right(0.4,avgSpeed,avgSpeed)
+        car.rotate_180_right(0.5,avgSpeed,avgSpeed)
         t.sleep(1)
-        Straight(avgSpeed,switch)
+        Straight(avgSpeed)
 
 def chargeRoutine(avgSpeed,switch):
 
@@ -101,18 +94,18 @@ def chargeRoutine(avgSpeed,switch):
         t.sleep(.5) 
 
         t.sleep(1)
-        car.rotate_180_left(0.4,avgSpeed,avgSpeed)
+        car.rotate_180_left(0.5,avgSpeed,avgSpeed)
         t.sleep(1)
-        Straight(avgSpeed,switch) 
+        Straight(avgSpeed) 
 
 def CheckFlagCharge(avgSpeed):
     while True:
         if (car.flag):
+            chargeRoutine(avgSpeed,1)
+            dischargeRoutine(avgSpeed,0)
+        else:
             dischargeRoutine(avgSpeed,1)
             chargeRoutine(avgSpeed,0)
-        else:
-            dischargeRoutine(avgSpeed,0)
-            chargeRoutine(avgSpeed,1)
 
 
 def main(): 
