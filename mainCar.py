@@ -37,7 +37,7 @@ distance = 0
 def Straight(avg_speed):
     while car.flag:
         IR = car.readIR()
-        #distance = car.obstacleDetector(trig_pin, echo_pin)
+        distance = car.obstacleDetector(trig_pin, echo_pin)
 
         if distance <= 40 and distance >=20:
             print("obstacle detected")
@@ -77,7 +77,7 @@ def dischargeRoutine(avgSpeed,switch):
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(1)
-        car.rotate_180_right(0.5,avgSpeed,avgSpeed)
+        car.rotate_180_right(0.3,avgSpeed,avgSpeed)
         t.sleep(1)
         Straight(avgSpeed)
 
@@ -94,14 +94,16 @@ def chargeRoutine(avgSpeed,switch):
         t.sleep(.5) 
 
         t.sleep(1)
-        car.rotate_180_left(0.5,avgSpeed,avgSpeed)
+        car.move_backward(avgSpeed,avgSpeed)
+        t.sleep(1)
+        car.rotate_180_left(0.3,avgSpeed,avgSpeed)
         t.sleep(1)
         Straight(avgSpeed) 
 
 def CheckFlagCharge(avgSpeed):
     while True:
         if (car.flag):
-            chargeRoutine(avgSpeed,1)
+            chargeRoutine(avgSpeed,1) 
             dischargeRoutine(avgSpeed,0)
         else:
             dischargeRoutine(avgSpeed,1)
@@ -114,5 +116,5 @@ def main():
 
 #chargeRoutine(AVGSPEED,1)
 CheckFlagCharge(AVGSPEED)
-
+#Straight(AVGSPEED)
 #UltrasonicMap()

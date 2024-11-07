@@ -248,10 +248,10 @@ class CARIR():
         """
         if self.flag == True:
             self.flag = False
-            print(self.flag)
+ 
         else:
             self.flag = True
-            print(self.flag)
+
    
     
     def GOstraight(self, IR: list, speed1, speed2):
