@@ -39,7 +39,7 @@ def Straight(avg_speed):
         IR = car.readIR()
         distance = car.obstacleDetector(trig_pin, echo_pin)
 
-        if distance <= 40 and distance >=20:
+        if distance <= 20 and distance >=15:
             print("obstacle detected")
             t.sleep(0.1)
             car.evasionRoutine(avg_speed,avg_speed)
@@ -111,10 +111,12 @@ def CheckFlagCharge(avgSpeed):
 
 
 def main(): 
+    _thread.start_new_thread(MappingServ, ())
     _thread.start_new_thread(CheckFlagCharge, [AVGSPEED])
 
 
 #chargeRoutine(AVGSPEED,1)
-CheckFlagCharge(AVGSPEED)
+#CheckFlagCharge(AVGSPEED)
 #Straight(AVGSPEED)
 #UltrasonicMap()
+main()
