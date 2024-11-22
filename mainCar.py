@@ -40,44 +40,60 @@ def Straight(avg_speed):
         distance = car.obstacleDetector(trig_pin, echo_pin)
 
         if distance <= 20 and distance >=15:
-            print("obstacle detected")
             t.sleep(0.1)
             car.evasionRoutine(avg_speed,avg_speed)
 
+        elif car.turnFlag:
+            break
         else:
-            car.GOstraight(IR,avg_speed,avg_speed)
+            car.GOstraight(IR,avg_speed-20,avg_speed-20)
 
+        
+
+def tournUntilLine(avgspeed):
+    while True:
+        car.readIR()
+
+        if car.lineDetected == 1:
+            car.rotate_180_left(avgspeed-20,avgspeed-20)
+            car.turnFlag = True
+        else:
+            car.turnFlag = False
+            break
+
+  
              
 def MappingServ():
     while True:
-        for i in range(0,50):
+        for i in range(0,45):
             moveServo(17,i)
             t.sleep(0.1)
 
 def moveServo(servo,angle):
     """
      Move the servo to a given position.
-    """
+    """ 
     servo = PWM(Pin(servo),freq=50)
         
     min_duty = 1
-    max_duty = 250
+    max_duty = 300
     duty = min_duty + (max_duty - min_duty) * angle // 180
     servo.duty(duty)
 
 def dischargeRoutine(avgSpeed,switch):
     if switch:
         car.setFlag()
+        t.sleep(0.5)
         car.stop()
         t.sleep(1)
-        moveServo(16,35)
-        t.sleep(1)
         moveServo(16,angle=10)
+        t.sleep(1)
+        moveServo(16,angle=35)
 
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(1)
-        car.rotate_180_right(0.3,avgSpeed,avgSpeed)
+        tournUntilLine()
         t.sleep(1)
         Straight(avgSpeed)
 
@@ -91,17 +107,18 @@ def chargeRoutine(avgSpeed,switch):
         moveServo(16,35)
         t.sleep(2)
         moveServo(16,75)
-        t.sleep(.5) 
 
-        t.sleep(1)
+        t.sleep(.5) 
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(1)
-        car.rotate_180_left(0.3,avgSpeed,avgSpeed)
+        tournUntilLine(avgSpeed)
         t.sleep(1)
         Straight(avgSpeed) 
 
+
 def CheckFlagCharge(avgSpeed):
     while True:
+        print(car.flag)
         if (car.flag):
             chargeRoutine(avgSpeed,1) 
             dischargeRoutine(avgSpeed,0)
@@ -119,4 +136,11 @@ def main():
 #CheckFlagCharge(AVGSPEED)
 #Straight(AVGSPEED)
 #UltrasonicMap()
+
 main()
+"""
+
+while True:
+    IR = car.readIR()
+    car.GOstraight(IR,AVGSPEED,AVGSPEED)
+"""

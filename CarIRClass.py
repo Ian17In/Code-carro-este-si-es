@@ -33,6 +33,8 @@ class CARIR():
         self.RIcenter = m.Pin(RIcenter_pin, m.Pin.IN)
 
         self.flag = True
+        self.lineDetected = False
+        self.turnFlag = False
     
     def setSpeed(self,speed1,speed2):
         """
@@ -130,7 +132,7 @@ class CARIR():
         self.in2.value(0)
 
         self.in3.value(0)
-        self.in4.value(1)
+        self.in4.value(1) 
 
         self.in5.value(0)
         self.in6.value(1)
@@ -174,7 +176,7 @@ class CARIR():
         Evasion routine for obstacles.
         """
 
-        self.Right(speed1+50,speed2+50)
+        self.Left(speed1+50,speed2+50)
         t.sleep(2)
         self.stop()
         t.sleep(0.5)
@@ -182,8 +184,8 @@ class CARIR():
         t.sleep(2)
         self.stop()
         t.sleep(0.5)
-        self.Left(speed1+50,speed2+50)
-        t.sleep(2)
+        self.Right(speed1+50,speed2+50)
+        t.sleep(2) 
 
     def readIR(self):
         """
@@ -193,6 +195,7 @@ class CARIR():
         left_values = [sensor.value() for sensor in self.RIleft]
         right_values = [sensor.value() for sensor in self.RIright]
         center_value = self.RIcenter.value()
+        self.lineDetected= self.RIcenter.value()
 
         # Crear una lista de resultados en el orden: izquierdo1, izquierdo2, central, derecho1, derecho2
         IR = left_values + [center_value] + right_values
@@ -202,7 +205,7 @@ class CARIR():
 
         return IR
 
-    def rotate_180_right(self,duration,speed1,speed2):
+    def rotate_180_right(self,speed1,speed2):
         """
         Gira el robot 180 grados.
         """
@@ -220,9 +223,7 @@ class CARIR():
         self.in7.value(0) #l
         self.in8.value(1)
 
-        t.sleep(duration)
-
-    def rotate_180_left(self, duration,speed1,speed2):
+    def rotate_180_left(self,speed1,speed2):
         """
         Gira el robot 180 grados en sentido contrario.
         """
@@ -240,8 +241,6 @@ class CARIR():
         self.in7.value(1) #r
         self.in8.value(0)
 
-        t.sleep(duration)
-
     def setFlag(self):
         """
         Cambia el stado de carga
@@ -249,10 +248,10 @@ class CARIR():
         if self.flag == True:
             self.flag = False
  
-        else:
+        elif self.flag == False:
             self.flag = True
-
-   
+        
+        print(self.flag)
     
     def GOstraight(self, IR: list, speed1, speed2):
         """
@@ -261,6 +260,7 @@ class CARIR():
         El valor 0 indica detección de línea, y el valor 1 indica que no hay línea.
         """
         sensor_izq2, sensor_izq1, sensor_central, sensor_der2, sensor_der1 = IR
+        self.lineDetected =  sensor_central
         #print(IR)
 
         # Caso 1: Solo el sensor central detecta la línea (continuar recto)
@@ -269,33 +269,37 @@ class CARIR():
             self.move_forward(speed1, speed2)
         elif sensor_central == 1 and sensor_izq1 == 0 and sensor_der1 == 1 and sensor_izq2==1 and sensor_der2 == 1:
             #print("ajuste a la izquierda.")
-            self.Right(speed1, speed2)
+            self.rotate_180_right(speed1-20, speed2-20)
         elif sensor_central == 1 and sensor_izq1 == 1 and sensor_der1 == 1 and sensor_izq2==1 and sensor_der2 == 0:
             #print("ajuste a la derecha.")
-            self.Left(speed1, speed2)
+            self.rotate_180_left(speed1-20, speed2-20)
 
         elif sensor_central == 0 and sensor_izq1 == 0 and sensor_izq2 == 0 and sensor_der1 == 1 and sensor_der2 == 1:
             #print("giro duro a la izquierda")
             self.stop()
-            t.sleep(0.01)
-            self.rotate_180_right(0.6,speed1,speed2)
-            t.sleep(0.01)
-            self.stop()
+            t.sleep(0.09)
+            self.rotate_180_right(speed1-20,speed2-20)
+
         elif sensor_central == 0 and sensor_der1 == 0 and sensor_der2 == 0 and sensor_izq1 == 1 and sensor_izq2 == 1:
             #print("giro duro a la derecha")
             self.stop()
-            t.sleep(0.01)
-            self.rotate_180_left(0.6,speed1,speed2)
-            t.sleep(0.01)
-            self.stop()
-        
+            t.sleep(0.09)
+            self.rotate_180_left(speed1-20,speed2-20)
+
         elif sensor_central == 1 and sensor_der1 == 1 and sensor_der2 == 1 and sensor_izq1 == 1 and sensor_izq2 == 1:
-            self.move_forward(speed1,speed2)
+            pass
 
         elif sensor_central == 0 and sensor_der1 == 0 and sensor_der2 == 0 and sensor_izq1 == 0 and sensor_izq2 == 0:
             #print("Stop")
             #print(self.counterFlag)
-            self.setFlag()
+            t.sleep(0.1)
+            
+            if self.flag == True:
+                self.flag = False
+ 
+            elif self.flag == False:
+                self.flag = True
+            t.sleep(0.1)
             self.stop()
             t.sleep(1)
 
@@ -303,6 +307,7 @@ class CARIR():
 
     
     
+
 
 if __name__ == '__main__':
     ENAPIN:int = 13
@@ -330,5 +335,10 @@ if __name__ == '__main__':
     trig_pin = 4
     echo_pin = 2
 
+
     car = CARIR(IN1PIN, IN2PIN, IN3PIN, IN4PIN, IN5PIN, IN6PIN, IN7PIN, IN8PIN, ENAPIN, ENBPIN, ENCPIN, ENDPIN, AVGSPEED, FREQ,RIleft_pin,RIright_pin,RIcente_pin)
+
+    while True:
+        IR = car.readIR()
+        car.GOstraight(IR,AVGSPEED,AVGSPEED)
  
