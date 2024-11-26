@@ -45,13 +45,19 @@ def Straight(avg_speed):
 
         elif car.turnFlag:
             break
+
         else:
             car.GOstraight(IR,avg_speed-20,avg_speed-20)
-
         
 
 def tournUntilLine(avgspeed):
+    car.stop()
+    t.sleep(0.1)
+    car.rotate_180_left(avgspeed,avgspeed)
+    t.sleep(0.5)
+    
     while True:
+
         car.readIR()
 
         if car.lineDetected == 1:
@@ -60,6 +66,8 @@ def tournUntilLine(avgspeed):
         else:
             car.turnFlag = False
             break
+
+    return bool(car.turnFlag)
 
   
              
@@ -82,20 +90,25 @@ def moveServo(servo,angle):
 
 def dischargeRoutine(avgSpeed,switch):
     if switch:
-        car.setFlag()
         t.sleep(0.5)
         car.stop()
         t.sleep(1)
         moveServo(16,angle=10)
         t.sleep(1)
         moveServo(16,angle=35)
+        car.setFlag()
 
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
-        t.sleep(1)
-        tournUntilLine()
-        t.sleep(1)
-        Straight(avgSpeed)
+        t.sleep(0.5)
+
+        bandera = tournUntilLine(avgSpeed)
+        t.sleep(0.1)
+        
+        if bandera == False:
+            Straight(avgSpeed)
+        else:
+            pass
 
 def chargeRoutine(avgSpeed,switch):
 
@@ -110,10 +123,13 @@ def chargeRoutine(avgSpeed,switch):
 
         t.sleep(.5) 
         car.move_backward(avgSpeed,avgSpeed)
-        t.sleep(1)
-        tournUntilLine(avgSpeed)
-        t.sleep(1)
-        Straight(avgSpeed) 
+        t.sleep(0.5)
+        bandera = tournUntilLine(avgSpeed)
+
+        if bandera == False:
+            Straight(avgSpeed)
+        else:
+            pass 
 
 
 def CheckFlagCharge(avgSpeed):

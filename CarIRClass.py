@@ -176,7 +176,7 @@ class CARIR():
         Evasion routine for obstacles.
         """
 
-        self.Left(speed1+50,speed2+50)
+        self.Right(speed1+50,speed2+50)
         t.sleep(2)
         self.stop()
         t.sleep(0.5)
