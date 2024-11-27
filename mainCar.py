@@ -150,15 +150,4 @@ def main():
     _thread.start_new_thread(CheckFlagCharge, [AVGSPEED])
 
 
-#chargeRoutine(AVGSPEED,1)
-#CheckFlagCharge(AVGSPEED)
-#Straight(AVGSPEED)
-#UltrasonicMap()
-
 main()
-"""
-
-while True:
-    IR = car.readIR()
-    car.GOstraight(IR,AVGSPEED,AVGSPEED)
-"""

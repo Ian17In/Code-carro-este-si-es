@@ -175,17 +175,28 @@ class CARIR():
         """
         Evasion routine for obstacles.
         """
-
-        self.Right(speed1+50,speed2+50)
-        t.sleep(2)
-        self.stop()
-        t.sleep(0.5)
-        self.move_forward(speed1,speed2) 
-        t.sleep(2)
-        self.stop()
-        t.sleep(0.5)
-        self.Right(speed1+50,speed2+50)
-        t.sleep(2) 
+        if self.flag:
+            self.Right(speed1+50,speed2+50)
+            t.sleep(2)
+            self.stop()
+            t.sleep(0.5)
+            self.move_forward(speed1,speed2) 
+            t.sleep(2)
+            self.stop()
+            t.sleep(0.5)
+            self.Left(speed1+50,speed2+50)
+            t.sleep(2) 
+        else:
+            self.Left(speed1+50,speed2+50)
+            t.sleep(2)
+            self.stop()
+            t.sleep(0.5)
+            self.move_forward(speed1,speed2) 
+            t.sleep(2)
+            self.stop()
+            t.sleep(0.5)
+            self.Right(speed1+50,speed2+50)
+            t.sleep(2)
 
     def readIR(self):
         """
