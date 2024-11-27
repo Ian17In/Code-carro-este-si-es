@@ -290,9 +290,7 @@ class CARIR():
             pass
 
         elif sensor_central == 0 and sensor_der1 == 0 and sensor_der2 == 0 and sensor_izq1 == 0 and sensor_izq2 == 0:
-            #print("Stop")
-            #print(self.counterFlag)
-            t.sleep(0.1)
+
             
             if self.flag == True:
                 self.flag = False
@@ -301,7 +299,8 @@ class CARIR():
                 self.flag = True
             t.sleep(0.1)
             self.stop()
-            t.sleep(1)
+            t.sleep(0.1)
+
 
 
 

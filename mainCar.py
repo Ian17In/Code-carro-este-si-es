@@ -90,13 +90,13 @@ def moveServo(servo,angle):
 
 def dischargeRoutine(avgSpeed,switch):
     if switch:
+        #car.setFlag()
         t.sleep(0.5)
         car.stop()
         t.sleep(1)
         moveServo(16,angle=10)
         t.sleep(1)
         moveServo(16,angle=35)
-        car.setFlag()
 
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
@@ -138,9 +138,11 @@ def CheckFlagCharge(avgSpeed):
         if (car.flag):
             chargeRoutine(avgSpeed,1) 
             dischargeRoutine(avgSpeed,0)
+            car.flag = False
         else:
             dischargeRoutine(avgSpeed,1)
             chargeRoutine(avgSpeed,0)
+            car.flag = True
 
 
 def main(): 
