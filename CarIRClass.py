@@ -206,6 +206,7 @@ class CARIR():
         left_values = [sensor.value() for sensor in self.RIleft]
         right_values = [sensor.value() for sensor in self.RIright]
         center_value = self.RIcenter.value()
+
         self.lineDetected= self.RIcenter.value()
 
         # Crear una lista de resultados en el orden: izquierdo1, izquierdo2, central, derecho1, derecho2

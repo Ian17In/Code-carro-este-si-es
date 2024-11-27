@@ -44,7 +44,7 @@ def Straight(avg_speed):
             car.evasionRoutine(avg_speed,avg_speed)
 
         elif car.turnFlag:
-            break
+            break 
 
         else:
             car.GOstraight(IR,avg_speed-20,avg_speed-20)
@@ -54,14 +54,15 @@ def tournUntilLine(avgspeed):
     car.stop()
     t.sleep(0.1)
     car.rotate_180_left(avgspeed,avgspeed)
-    t.sleep(0.5)
+    t.sleep(0.4
+    )
     
     while True:
 
         car.readIR()
 
         if car.lineDetected == 1:
-            car.rotate_180_left(avgspeed-20,avgspeed-20)
+            car.rotate_180_left(avgspeed-30,avgspeed-30)
             car.turnFlag = True
         else:
             car.turnFlag = False
@@ -101,10 +102,10 @@ def dischargeRoutine(avgSpeed,switch):
         t.sleep(0.5)
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(0.5)
-
+        car.flag = False
         bandera = tournUntilLine(avgSpeed)
         t.sleep(0.1)
-        
+        car.flag =True
         if bandera == False:
             Straight(avgSpeed)
         else:
@@ -124,7 +125,10 @@ def chargeRoutine(avgSpeed,switch):
         t.sleep(.5) 
         car.move_backward(avgSpeed,avgSpeed)
         t.sleep(0.5)
+        car.flag = False
         bandera = tournUntilLine(avgSpeed)
+        t.sleep(0.1)
+        car.flag =True
 
         if bandera == False:
             Straight(avgSpeed)
@@ -143,6 +147,7 @@ def CheckFlagCharge(avgSpeed):
             dischargeRoutine(avgSpeed,1)
             chargeRoutine(avgSpeed,0)
             car.flag = True
+
 
 
 def main(): 
