@@ -35,6 +35,7 @@ class CARIR():
         self.flag = True
         self.lineDetected = False
         self.turnFlag = False
+        self.ischarged = False
     
     def setSpeed(self,speed1,speed2):
         """
@@ -175,7 +176,7 @@ class CARIR():
         """
         Evasion routine for obstacles.
         """
-        if self.flag:
+        if self.ischarged:
             self.Right(speed1+50,speed2+50)
             t.sleep(2)
             self.stop()
@@ -185,7 +186,8 @@ class CARIR():
             self.stop()
             t.sleep(0.5)
             self.Left(speed1+50,speed2+50)
-            t.sleep(2) 
+            t.sleep(1)
+
         else:
             self.Left(speed1+50,speed2+50)
             t.sleep(2)
@@ -196,7 +198,7 @@ class CARIR():
             self.stop()
             t.sleep(0.5)
             self.Right(speed1+50,speed2+50)
-            t.sleep(2)
+            t.sleep(1)
 
     def readIR(self):
         """
@@ -289,13 +291,13 @@ class CARIR():
         elif sensor_central == 0 and sensor_izq1 == 0 and sensor_izq2 == 0 and sensor_der1 == 1 and sensor_der2 == 1:
             #print("giro duro a la izquierda")
             self.stop()
-            t.sleep(0.09)
+            #t.sleep(0.09)
             self.rotate_180_right(speed1-20,speed2-20)
 
         elif sensor_central == 0 and sensor_der1 == 0 and sensor_der2 == 0 and sensor_izq1 == 1 and sensor_izq2 == 1:
             #print("giro duro a la derecha")
             self.stop()
-            t.sleep(0.09)
+            #t.sleep(0.09)
             self.rotate_180_left(speed1-20,speed2-20)
 
         elif sensor_central == 1 and sensor_der1 == 1 and sensor_der2 == 1 and sensor_izq1 == 1 and sensor_izq2 == 1:
@@ -348,8 +350,14 @@ if __name__ == '__main__':
 
 
     car = CARIR(IN1PIN, IN2PIN, IN3PIN, IN4PIN, IN5PIN, IN6PIN, IN7PIN, IN8PIN, ENAPIN, ENBPIN, ENCPIN, ENDPIN, AVGSPEED, FREQ,RIleft_pin,RIright_pin,RIcente_pin)
+    for i in range(0,4):
+        #car.move_forward(250, 250)
+        t.sleep(2)
+        car.flag == True
+        car.evasionRoutine(AVGSPEED,AVGSPEED)
 
-    while True:
-        IR = car.readIR()
-        car.GOstraight(IR,AVGSPEED,AVGSPEED)
+        t.sleep(1)
+
+        car.flag = False
+        car.evasionRoutine(AVGSPEED,AVGSPEED)
  

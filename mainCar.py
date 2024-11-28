@@ -41,7 +41,7 @@ def Straight(avg_speed):
 
         if distance <= 20 and distance >=15:
             t.sleep(0.1)
-            car.evasionRoutine(avg_speed,avg_speed)
+            car.evasionRoutine(avg_speed+10,avg_speed+10)
 
         elif car.turnFlag:
             break 
@@ -74,7 +74,7 @@ def tournUntilLine(avgspeed):
              
 def MappingServ():
     while True:
-        for i in range(0,45):
+        for i in range(0,15):
             moveServo(17,i)
             t.sleep(0.1)
 
@@ -82,10 +82,10 @@ def moveServo(servo,angle):
     """
      Move the servo to a given position.
     """ 
-    servo = PWM(Pin(servo),freq=50)
+    servo = PWM(Pin(servo),freq=20)
         
     min_duty = 1
-    max_duty = 300
+    max_duty = 350
     duty = min_duty + (max_duty - min_duty) * angle // 180
     servo.duty(duty)
 
@@ -143,10 +143,12 @@ def CheckFlagCharge(avgSpeed):
             chargeRoutine(avgSpeed,1) 
             dischargeRoutine(avgSpeed,0)
             car.flag = False
+            car.ischarged = True
         else:
             dischargeRoutine(avgSpeed,1)
             chargeRoutine(avgSpeed,0)
             car.flag = True
+            car.ischarged = False
 
 
 
@@ -156,3 +158,5 @@ def main():
 
 
 main()
+ 
+    
